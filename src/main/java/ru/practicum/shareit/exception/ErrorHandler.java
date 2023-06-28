@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import ru.practicum.shareit.item.ItemNotFoundException;
 import ru.practicum.shareit.user.UserAllreadyExcetprion;
 import ru.practicum.shareit.user.UserNotFoundException;
 
@@ -15,17 +16,17 @@ import ru.practicum.shareit.user.UserNotFoundException;
 public class ErrorHandler {
 
     @ExceptionHandler({UserAllreadyExcetprion.class})
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleAllreadyError(final RuntimeException e) {
         log.info(e.getMessage());
         return new ErrorResponse("E001", e.getMessage());
     }
 
-    @ExceptionHandler({UserNotFoundException.class})
+    @ExceptionHandler({UserNotFoundException.class, ItemNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundError(final RuntimeException e) {
         log.info(e.getMessage());
-        return new ErrorResponse("E001", e.getMessage());
+        return new ErrorResponse("E002", e.getMessage());
     }
 
     @AllArgsConstructor

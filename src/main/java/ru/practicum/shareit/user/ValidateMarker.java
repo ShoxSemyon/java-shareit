@@ -7,5 +7,3 @@ import javax.validation.groups.Default;
 interface ValidateMarker {
 }
 
-interface CreateMarker {
-}

@@ -3,11 +3,15 @@ package ru.practicum.shareit.user.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
+import lombok.extern.slf4j.Slf4j;
 import ru.practicum.shareit.user.User;
 
 @Getter
 @Setter
 @AllArgsConstructor
+@ToString
+@Slf4j
 public class UserDto {
     long id;//— уникальный идентификатор пользователя;
 

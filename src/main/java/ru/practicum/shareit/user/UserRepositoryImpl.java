@@ -12,9 +12,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public UserDto save(UserDto userDto) {
-        emailExisting(userDto);
+        emailNotExisting(userDto);
         userDto.setId(++idCounter);
-        return userDtoList.put(userDto.getId(), userDto);
+        userDtoList.put(userDto.getId(), userDto);
+
+        return userDto;
     }
 
     @Override
@@ -24,36 +26,46 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public UserDto load(long id) {
-        if (!userDtoList.containsKey(id)) throw new UserNotFoundException();
+        idExisting(id);
 
         return userDtoList.get(id);
     }
 
     @Override
     public UserDto update(UserDto userDto) {
-        if (!userDtoList.containsKey(userDto.getId())) throw new UserNotFoundException();
+        idExisting(userDto.getId());
 
         UserDto oldUserDto = userDtoList.get(userDto.getId());
-        if (userDto.getEmail() == null) userDto.setEmail(oldUserDto.getEmail());
+        if (userDto.getEmail() == null) {
+            userDto.setEmail(oldUserDto.getEmail());
+        } else {
+            emailNotExisting(userDto);
+        }
         if (userDto.getName() == null) userDto.setName(oldUserDto.getName());
 
-        emailExisting(userDto);
 
-        return userDtoList.put(userDto.getId(), userDto);
+        userDtoList.put(userDto.getId(), userDto);
+        return userDto;
     }
 
     @Override
     public void delete(long id) {
-        if (!userDtoList.containsKey(id)) throw new UserNotFoundException();
+        idExisting(id);
 
         userDtoList.remove(id);
     }
 
-    private void emailExisting(UserDto userDto) {
+    private void emailNotExisting(UserDto userDto) {
         Optional<UserDto> optionalUserDto = userDtoList.values()
                 .stream()
                 .filter(user -> user.getEmail().equals(userDto.getEmail()))
                 .findFirst();
-        if (optionalUserDto.isPresent()) throw new UserAllreadyExcetprion();
+        if (optionalUserDto.isPresent() && userDto.getId() != optionalUserDto.get().getId())
+            throw new UserAllreadyExcetprion(String.format("Клиент с email = %s уже существует", userDto.getEmail()));
+    }
+
+    private void idExisting(long id) {
+        if (!userDtoList.containsKey(id))
+            throw new UserNotFoundException(String.format("Клиент с id = %s не найден", id));
     }
 }
