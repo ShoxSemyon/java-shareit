@@ -2,8 +2,8 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.user.UserRepository;
 
 import java.util.ArrayList;
@@ -17,44 +17,44 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
 
     @Override
-    public Item create(Item item, Long id) {
+    public ItemDto create(ItemDto itemDto, Long id) {
         userRepository.load(id);
-        ItemDto itemDto = ItemDto.convertToItemDto(item);
-        itemDto.setOwner(id);
-        itemRepository.save(itemDto);
-        return Item.convertToItem(itemDto);
+        Item item = ItemMapper.convertToItemDto(itemDto);
+        item.setOwner(id);
+        itemRepository.save(item);
+        return ItemMapper.convertToItem(item);
     }
 
     @Override
-    public List<Item> getAll(Long id) {
+    public List<ItemDto> getAll(Long id) {
         return itemRepository.loadAll(id)
                 .stream()
-                .map(Item::convertToItem)
+                .map(ItemMapper::convertToItem)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Item get(Long id) {
-        return Item.convertToItem(itemRepository.load(id));
+    public ItemDto get(Long id) {
+        return ItemMapper.convertToItem(itemRepository.load(id));
     }
 
     @Override
-    public List<Item> search(String value) {
+    public List<ItemDto> search(String value) {
         if (value == null || value.isBlank()) return new ArrayList<>();
 
         return itemRepository.search(value)
                 .stream()
-                .map(Item::convertToItem)
+                .map(ItemMapper::convertToItem)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public Item update(Item item, Long id, Long itemId) {
+    public ItemDto update(ItemDto itemDto, Long id, Long itemId) {
         userRepository.load(id);
-        ItemDto itemDto = ItemDto.convertToItemDto(item);
-        itemDto.setId(itemId);
-        itemRepository.update(itemDto, id);
-        return Item.convertToItem(itemDto);
+        Item item = ItemMapper.convertToItemDto(itemDto);
+        item.setId(itemId);
+        itemRepository.update(item, id);
+        return ItemMapper.convertToItem(item);
     }
 
     @Override

@@ -1,71 +1,75 @@
 package ru.practicum.shareit.user;
 
 import org.springframework.stereotype.Repository;
-import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.exception.AllreadyExcetprion;
+import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.user.dto.User;
 
 import java.util.*;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
-    private final Map<Long, UserDto> userDtoList = new HashMap<>();
+    private final Map<Long, User> userDtoList = new HashMap<>();
+    private final Set<String> mailList = new HashSet<>();
     private Long idCounter = 0L;
 
     @Override
-    public UserDto save(UserDto userDto) {
-        emailNotExisting(userDto);
-        userDto.setId(++idCounter);
-        userDtoList.put(userDto.getId(), userDto);
+    public User save(User user) {
+        emailNotExisting(user.getEmail());
+        user.setId(++idCounter);
+        mailList.add(user.getEmail());
+        userDtoList.put(user.getId(), user);
 
-        return userDto;
+        return user;
     }
 
     @Override
-    public List<UserDto> loadAll() {
+    public List<User> loadAll() {
         return new ArrayList<>(userDtoList.values());
     }
 
     @Override
-    public UserDto load(long id) {
+    public User load(long id) {
         idExisting(id);
 
         return userDtoList.get(id);
     }
 
     @Override
-    public UserDto update(UserDto userDto) {
-        idExisting(userDto.getId());
+    public User update(User user) {
+        idExisting(user.getId());
 
-        UserDto oldUserDto = userDtoList.get(userDto.getId());
-        if (userDto.getEmail() == null) {
-            userDto.setEmail(oldUserDto.getEmail());
-        } else {
-            emailNotExisting(userDto);
+        User oldUser = userDtoList.get(user.getId());
+        if (user.getEmail() == null) {
+            user.setEmail(oldUser.getEmail());
+        } else if (!user.getEmail().equals(oldUser.getEmail())) {
+            emailNotExisting(user.getEmail());
+            mailList.remove(oldUser.getEmail());
+            mailList.add(user.getEmail());
         }
-        if (userDto.getName() == null) userDto.setName(oldUserDto.getName());
+        if (user.getName() == null) user.setName(oldUser.getName());
 
 
-        userDtoList.put(userDto.getId(), userDto);
-        return userDto;
+        userDtoList.put(user.getId(), user);
+        return user;
     }
 
     @Override
     public void delete(long id) {
         idExisting(id);
-
+        mailList.remove(userDtoList
+                .get(id)
+                .getEmail());
         userDtoList.remove(id);
     }
 
-    private void emailNotExisting(UserDto userDto) {
-        Optional<UserDto> optionalUserDto = userDtoList.values()
-                .stream()
-                .filter(user -> user.getEmail().equals(userDto.getEmail()))
-                .findFirst();
-        if (optionalUserDto.isPresent() && userDto.getId() != optionalUserDto.get().getId())
-            throw new UserAllreadyExcetprion(String.format("Клиент с email = %s уже существует", userDto.getEmail()));
+    private void emailNotExisting(String email) {
+        if (mailList.contains(email))
+            throw new AllreadyExcetprion(String.format("Клиент с email = %s уже существует", email));
     }
 
     private void idExisting(long id) {
         if (!userDtoList.containsKey(id))
-            throw new UserNotFoundException(String.format("Клиент с id = %s не найден", id));
+            throw new NotFoundException(String.format("Клиент с id = %s не найден", id));
     }
 }

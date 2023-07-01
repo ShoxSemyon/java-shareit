@@ -3,7 +3,7 @@ package ru.practicum.shareit.user;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.User;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -15,31 +15,31 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
 
     @Override
-    public User create(User user) {
-        UserDto userDto = userRepository.save(UserDto.createUserDto(user));
-        log.info("Пользователь добавлен {}", userDto);
-        return User.converFromDto(userDto);
+    public UserDto create(UserDto userDto) {
+        User user = userRepository.save(UserMapper.createUserDto(userDto));
+        log.info("Пользователь добавлен {}", user);
+        return UserMapper.converFromDto(user);
     }
 
     @Override
-    public User get(Long id) {
-        return User.converFromDto(userRepository.load(id));
+    public UserDto get(Long id) {
+        return UserMapper.converFromDto(userRepository.load(id));
     }
 
     @Override
-    public List<User> getAll() {
+    public List<UserDto> getAll() {
         return userRepository.loadAll()
                 .stream()
-                .map(User::converFromDto)
+                .map(UserMapper::converFromDto)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public User update(User user, long id) {
-        UserDto userDto = UserDto.createUserDto(user);
-        userDto.setId(id);
-        log.info("Пользователь обновлён {}", userDto);
-        return User.converFromDto(userRepository.update(userDto));
+    public UserDto update(UserDto userDto, long id) {
+        User user = UserMapper.createUserDto(userDto);
+        user.setId(id);
+        log.info("Пользователь обновлён {}", user);
+        return UserMapper.converFromDto(userRepository.update(user));
     }
 
     @Override

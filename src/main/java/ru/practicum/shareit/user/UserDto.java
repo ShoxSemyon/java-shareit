@@ -1,10 +1,7 @@
 package ru.practicum.shareit.user;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-import ru.practicum.shareit.user.dto.UserDto;
+import lombok.*;
+import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -17,19 +14,16 @@ import javax.validation.constraints.NotNull;
 @Setter
 @AllArgsConstructor
 @ToString
-public class User {
+@FieldDefaults(level = AccessLevel.PRIVATE)
+public class UserDto {
+    @NotNull(groups = UpdateGroupMarker.UpdateMarker.class)
     long id;//— уникальный идентификатор пользователя;
 
-    @NotBlank(groups = CreateMarker.class)
+    @NotBlank(groups = UserCreateGroupMarker.UserCreateMarker.class)
     String name; //— имя или логин пользователя;
 
-    @NotNull(groups = CreateMarker.class)
+    @NotNull(groups = UserCreateGroupMarker.UserCreateMarker.class)
     @Email
     String email;//— адрес электронной почты (учтите, что два пользователя не могут иметь одинаковый адрес электронной почты).
 
-    public static User converFromDto(UserDto userDto) {
-        return new User(userDto.getId(),
-                userDto.getName(),
-                userDto.getEmail());
-    }
 }

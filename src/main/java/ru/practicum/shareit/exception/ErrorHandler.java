@@ -7,26 +7,29 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-import ru.practicum.shareit.item.ItemNotFoundException;
-import ru.practicum.shareit.user.UserAllreadyExcetprion;
-import ru.practicum.shareit.user.UserNotFoundException;
 
 @RestControllerAdvice
 @Slf4j
 public class ErrorHandler {
 
-    @ExceptionHandler({UserAllreadyExcetprion.class})
+    @ExceptionHandler({AllreadyExcetprion.class})
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleAllreadyError(final RuntimeException e) {
         log.info(e.getMessage());
         return new ErrorResponse("E001", e.getMessage());
     }
 
-    @ExceptionHandler({UserNotFoundException.class, ItemNotFoundException.class})
+    @ExceptionHandler({NotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleNotFoundError(final RuntimeException e) {
         log.info(e.getMessage());
         return new ErrorResponse("E002", e.getMessage());
+    }
+
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleThrowable(final Throwable  e) {
+        log.info(e.getMessage());
+        return new ErrorResponse("E003", e.getMessage());
     }
 
     @AllArgsConstructor

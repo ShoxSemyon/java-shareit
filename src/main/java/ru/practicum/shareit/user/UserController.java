@@ -1,11 +1,11 @@
 package ru.practicum.shareit.user;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.groups.Default;
 import java.util.List;
 
 /**
@@ -14,25 +14,30 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/users")
 @AllArgsConstructor
+@Validated
+@Slf4j
 public class UserController {
     private UserService userService;
 
     @PostMapping
-    public User create(
-            @Validated({ValidateMarker.class})
-            @RequestBody User user) {
-        return userService.create(user);
+    public UserDto create(
+            @Validated({UserCreateGroupMarker.class})
+            @RequestBody UserDto userDto) {
+        log.info("Начало сохранение пользователя {}", userDto);
+        return userService.create(userDto);
     }
 
     @GetMapping
-    public List<User> getAll() {
+    public List<UserDto> getAll() {
+        log.info("Начало запроса всех пользователей");
         return userService.getAll();
     }
 
     @GetMapping("/{id}")
-    public User get(@PathVariable
-                    @NotNull
-                    Long id) {
+    public UserDto get(@PathVariable
+                       @NotNull
+                       Long id) {
+        log.info("Начало запроса  пользователя с id={}", id);
         return userService.get(id);
     }
 
@@ -40,17 +45,19 @@ public class UserController {
     public void delete(@PathVariable
                        @NotNull
                        Long id) {
+        log.info("Начало удаления  пользователя с id={}", id);
         userService.delete(id);
     }
 
     @PatchMapping("/{id}")
-    public User update(
-            @Validated(Default.class)
+    public UserDto update(
+            @Validated(UpdateGroupMarker.class)
             @RequestBody
-            User user,
+            UserDto userDto,
             @PathVariable
             @NotNull
             Long id) {
-        return userService.update(user, id);
+        log.info("Начало обновления  пользователя {} с id={}", userDto, id);
+        return userService.update(userDto, id);
     }
 }
