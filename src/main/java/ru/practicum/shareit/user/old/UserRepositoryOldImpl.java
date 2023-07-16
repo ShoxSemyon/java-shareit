@@ -1,14 +1,13 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.old;
 
-import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.AllreadyExcetprion;
 import ru.practicum.shareit.exception.NotFoundException;
-import ru.practicum.shareit.user.dto.User;
+import ru.practicum.shareit.user.User;
 
 import java.util.*;
 
-@Repository
-public class UserRepositoryImpl implements UserRepository {
+
+public class UserRepositoryOldImpl implements UserRepositoryOld {
     private final Map<Long, User> userDtoList = new HashMap<>();
     private final Set<String> mailList = new HashSet<>();
     private Long idCounter = 0L;

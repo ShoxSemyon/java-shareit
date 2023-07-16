@@ -1,7 +1,9 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.shareit.user.UpdateGroupMarker;
+import ru.practicum.shareit.user.UserCreateGroupMarker;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;

@@ -1,17 +1,16 @@
 package ru.practicum.shareit.user;
 
-import ru.practicum.shareit.user.dto.User;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-import java.util.List;
-
-public interface UserRepository {
-    User save(User user);
-
-    List<User> loadAll();
-
-    User load(long id);
-
-    User update(User user);
-
-    void delete(long id);
+public interface UserRepository extends JpaRepository<User,Long>{
+    @Modifying
+    @Query(value = "UPDATE USERS it SET EMAIL = coalesce(:email, EMAIL),\n" +
+            "    NAME = coalesce(:name, NAME)\n" +
+            "    WHERE ID =:id", nativeQuery = true)
+    Integer update(@Param("id") Long id,
+                   @Param("email") String email,
+                   @Param("name") String name);
 }
