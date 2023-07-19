@@ -7,9 +7,11 @@ import org.springframework.data.repository.query.Param;
 import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findAllByOwnerId(Long id);
+    Optional<Item> findByIdAndAndAvailable(long id, boolean available);
 
     @Modifying
     @Query(value = "UPDATE ITEMS it SET NAME = coalesce(:name, NAME),\n" +

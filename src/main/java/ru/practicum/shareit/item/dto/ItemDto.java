@@ -2,10 +2,13 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.ReadOnlyProperty;
+import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.item.ItemUpdateMarker;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 /**
  * TODO Sprint add-controllers.
@@ -31,5 +34,14 @@ public class ItemDto {
 
     long owner;// — владелец вещи;
     long request;// — если вещь была создана по запросу другого пользователя, то в этом поле будет храниться ссылка на соответствующий запрос.
+
+    @ReadOnlyProperty
+    BookingShortDto lastBooking;
+
+    @ReadOnlyProperty
+    BookingShortDto nextBooking;
+
+    @ReadOnlyProperty
+    List<CommentDto> comments;
 
 }

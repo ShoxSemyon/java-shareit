@@ -2,6 +2,9 @@ package ru.practicum.shareit.item.model;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.annotation.ReadOnlyProperty;
+import ru.practicum.shareit.booking.dto.BookingDto;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.user.User;
 
 import javax.persistence.*;
@@ -33,4 +36,5 @@ public class Item {
 
     @Column(name = "request_id")
     Long request;//
+
 }

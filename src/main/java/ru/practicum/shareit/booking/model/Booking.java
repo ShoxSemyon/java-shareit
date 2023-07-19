@@ -1,13 +1,12 @@
 package ru.practicum.shareit.booking.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.ReadOnlyProperty;
+import ru.practicum.shareit.booking.dto.BookingStatus;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.User;
 
-import javax.validation.constraints.Future;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 
 /**
@@ -19,26 +18,25 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Entity
+@Table(schema = "public", name = "bookings")
 public class Booking {
-    @ReadOnlyProperty
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-    long itemId;
 
-    @Future
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-    LocalDateTime start;
+    LocalDateTime startDate;
+    LocalDateTime endDate;
 
-    @Future
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
-    LocalDateTime end;
-
-    @ReadOnlyProperty
+    @ManyToOne(fetch = FetchType.LAZY)
     Item item;
 
-    @ReadOnlyProperty
+    @ManyToOne(fetch = FetchType.LAZY)
     User booker;
 
-    @ReadOnlyProperty
-    String status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    BookingStatus bookingStatus;
 }
