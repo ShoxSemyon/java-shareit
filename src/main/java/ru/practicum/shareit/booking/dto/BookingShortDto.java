@@ -3,7 +3,6 @@ package ru.practicum.shareit.booking.dto;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.springframework.data.annotation.ReadOnlyProperty;
-import ru.practicum.shareit.user.dto.UserDto;
 
 @Getter
 @Setter

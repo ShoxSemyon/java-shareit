@@ -18,18 +18,20 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final EntityManager entityManager;
 
-
     @Override
     public UserDto create(UserDto userDto) {
         User user = userRepository.save(UserMapper.createUserDto(userDto));
-        log.info("Пользователь добавлен {}", user);
+
+
+        log.info("Пользователь добавлен {}",
+                user);
         return UserMapper.converFromDto(user);
     }
 
     @Override
     public UserDto get(Long id) {
-        return UserMapper.converFromDto(userRepository.findById(id).
-                orElseThrow(() -> exceptionFormat(id)));
+        return UserMapper.converFromDto(userRepository.findById(id)
+                .orElseThrow(() -> exceptionFormat(id)));
     }
 
     @Override
@@ -46,8 +48,9 @@ public class UserServiceImpl implements UserService {
         User user = UserMapper.createUserDto(userDto);
         user.setId(id);
 
-
-        if (userRepository.update(user.getId(), user.getEmail(), user.getName()) < 1)
+        if (userRepository.update(user.getId(),
+                user.getEmail(),
+                user.getName()) < 1)
             throw exceptionFormat(id);
 
         log.info("Пользователь c id {} обновлён", user.getId());

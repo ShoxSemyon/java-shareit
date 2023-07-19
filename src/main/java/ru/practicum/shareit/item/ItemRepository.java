@@ -11,6 +11,7 @@ import java.util.Optional;
 
 public interface ItemRepository extends JpaRepository<Item, Long> {
     List<Item> findAllByOwnerId(Long id);
+
     Optional<Item> findByIdAndAndAvailable(long id, boolean available);
 
     @Modifying
@@ -31,5 +32,7 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
             "OR lower(i.description) like concat('%',lower(:value),'%'))" +
             "AND i.available IS true ")
     List<Item> searchByValue(@Param("value") String value);
+
+    Integer deleteByIdAndOwner_Id(long ownerId, long itemId);
 
 }

@@ -5,7 +5,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface UserRepository extends JpaRepository<User,Long>{
+public interface UserRepository extends JpaRepository<User, Long> {
+
     @Modifying
     @Query(value = "UPDATE USERS it SET EMAIL = coalesce(:email, EMAIL),\n" +
             "    NAME = coalesce(:name, NAME)\n" +

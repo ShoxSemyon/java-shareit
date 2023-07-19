@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ru.practicum.shareit.booking.BookingState.*;
 import static ru.practicum.shareit.booking.dto.BookingStatus.APPROVED;
 
 @Service
@@ -36,20 +35,26 @@ public class BookingServiceImpl implements BookingService {
     @Transactional
     public BookingDto create(BookingDto bookingDto, Long userId) {
 
-        User user = userRepository.findById(userId).orElseThrow(() -> UserServiceImpl.exceptionFormat(userId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> UserServiceImpl.exceptionFormat(userId));
         Item item = itemRepository.findById(bookingDto.getItemId())
                 .orElseThrow(() -> ItemServiceImpl.exceptionFormat(bookingDto.getItemId()));
 
         if (!item.getAvailable())
             throw exceptionFormatUnavailable("Вещь", userId);
 
-        if (userId == item.getOwner().getId()) throw ItemServiceImpl.exceptionFormat(item.getId());
+        if (userId == item.getOwner().getId())
+            throw ItemServiceImpl.exceptionFormat(item.getId());
 
         Booking booking = BookingMapper.convertToBooking(bookingDto);
         booking.setBooker(user);
         booking.setItem(item);
         booking.setBookingStatus(BookingStatus.WAITING);
-        log.info("Бронь {} создана  для клиента id={}", bookingDto, userId);
+
+        log.info("Бронь {} создана  для клиента id={}",
+                bookingDto,
+                userId);
+
         return BookingMapper.convertToBookingDto(bookingRepository.save(booking));
     }
 
@@ -63,10 +68,12 @@ public class BookingServiceImpl implements BookingService {
             throw exceptionformatNotFound(booking.getItem().getId());
         }
         if (!booking.getBookingStatus().equals(BookingStatus.WAITING))
-            throw exceptionFormatUnavailable("Бронт", bookingId);
+            throw exceptionFormatUnavailable("Бронь", bookingId);
 
         booking.setBookingStatus(approved ? APPROVED : BookingStatus.REJECTED);
-        log.info("Статус для брони {} изменён владельцем id={}", bookingId, ownerId);
+        log.info("Статус для брони {} изменён владельцем id={}",
+                bookingId,
+                ownerId);
 
         return BookingMapper.convertToBookingDto(bookingRepository.save(booking));
     }
@@ -79,6 +86,9 @@ public class BookingServiceImpl implements BookingService {
         if (booking.getBooker().getId() != userId && booking.getItem().getOwner().getId() != userId)
             throw exceptionformatNotFound(bookingId);
 
+        log.info("Бронь id={} для пользователя найдена id = {}",
+                bookingId,
+                userId);
         return BookingMapper.convertToBookingDto(booking);
     }
 
@@ -87,26 +97,44 @@ public class BookingServiceImpl implements BookingService {
     public List<BookingDto> getAllForUser(Long userId, BookingState state) {
         List<Booking> bookings = new ArrayList<>();
 
-        if (state.equals(ALL)) bookings = bookingRepository.findAllByBooker_IdOrderByStartDateDesc(userId);
-        if (state.equals(PAST))
-            bookings = bookingRepository
-                    .findAllByBooker_IdAndAndEndDateBeforeOrderByStartDateDesc(userId, LocalDateTime.now());
-        if (state.equals(FUTURE))
-            bookings = bookingRepository
-                    .findAllByBooker_IdAndAndStartDateAfterOrderByStartDateDesc(userId, LocalDateTime.now());
+        switch (state) {
+            case ALL:
+                bookings = bookingRepository.findAllByBooker_IdOrderByStartDateDesc(
+                        userId);
+                break;
+            case PAST:
+                bookings = bookingRepository
+                        .findAllByBooker_IdAndAndEndDateBeforeOrderByStartDateDesc(
+                                userId,
+                                LocalDateTime.now());
+                break;
+            case FUTURE:
+                bookings = bookingRepository
+                        .findAllByBooker_IdAndAndStartDateAfterOrderByStartDateDesc(
+                                userId,
+                                LocalDateTime.now());
+                break;
+            case WAITING:
+            case REJECTED:
+                bookings = bookingRepository
+                        .findAllByBooker_IdAndBookingStatusOrderByStartDateDesc(
+                                userId,
+                                BookingStatus.valueOf(state.name()));
+                break;
+            case CURRENT:
+                bookings = bookingRepository
+                        .findAllByBooker_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(
+                                userId,
+                                LocalDateTime.now(),
+                                LocalDateTime.now());
+        }
 
-        if (state.equals(WAITING) || state.equals(REJECTED))
-            bookings = bookingRepository
-                    .findAllByBooker_IdAndBookingStatusOrderByStartDateDesc(userId,
-                            BookingStatus.valueOf(state.name()));
-
-        if (state.equals(CURRENT))
-            bookings = bookingRepository
-                    .findAllByBooker_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(userId,
-                            LocalDateTime.now(),
-                            LocalDateTime.now());
 
         if (bookings.size() == 0) throw new NotFoundException();
+
+        log.info("Запрос всех броней для клиента id ={} со статусом = {} получен}",
+                userId,
+                state);
 
         return bookings.stream()
                 .map(BookingMapper::convertToBookingDto)
@@ -118,29 +146,43 @@ public class BookingServiceImpl implements BookingService {
     public List<BookingDto> getAllForOwner(Long ownerId, BookingState state) {
         List<Booking> bookings = new ArrayList<>();
 
-        if (state.equals(ALL))
-            bookings = bookingRepository.findAllByItem_Owner_IdOrderByStartDateDesc(ownerId);
-        if (state.equals(PAST))
-            bookings = bookingRepository
-                    .findAllByItem_Owner_IdAndAndEndDateBeforeOrderByStartDateDesc(ownerId,
-                            LocalDateTime.now());
-        if (state.equals(FUTURE))
-            bookings = bookingRepository
-                    .findAllByItem_Owner_IdAndAndStartDateAfterOrderByStartDateDesc(ownerId,
-                            LocalDateTime.now());
-
-        if (state.equals(WAITING) || state.equals(REJECTED))
-            bookings = bookingRepository
-                    .findAllByItem_Owner_IdAndBookingStatusOrderByStartDateDesc(ownerId,
-                            BookingStatus.valueOf(state.name()));
-
-        if (state.equals(CURRENT))
-            bookings = bookingRepository
-                    .findAllByItem_Owner_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(ownerId,
-                            LocalDateTime.now(),
-                            LocalDateTime.now());
+        switch (state) {
+            case ALL:
+                bookings = bookingRepository.findAllByItem_Owner_IdOrderByStartDateDesc(
+                        ownerId);
+                break;
+            case PAST:
+                bookings = bookingRepository
+                        .findAllByItem_Owner_IdAndAndEndDateBeforeOrderByStartDateDesc(
+                                ownerId,
+                                LocalDateTime.now());
+                break;
+            case FUTURE:
+                bookings = bookingRepository
+                        .findAllByItem_Owner_IdAndAndStartDateAfterOrderByStartDateDesc(
+                                ownerId,
+                                LocalDateTime.now());
+                break;
+            case WAITING:
+            case REJECTED:
+                bookings = bookingRepository
+                        .findAllByItem_Owner_IdAndBookingStatusOrderByStartDateDesc(
+                                ownerId,
+                                BookingStatus.valueOf(state.name()));
+                break;
+            case CURRENT:
+                bookings = bookingRepository
+                        .findAllByItem_Owner_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(
+                                ownerId,
+                                LocalDateTime.now(),
+                                LocalDateTime.now());
+        }
 
         if (bookings.size() == 0) throw new NotFoundException();
+
+        log.info("Запрос всех броней для владельца id ={} со статусом = {} получен}",
+                ownerId,
+                state);
 
         return bookings.stream()
                 .map(BookingMapper::convertToBookingDto)

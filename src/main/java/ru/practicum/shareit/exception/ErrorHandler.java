@@ -28,6 +28,7 @@ public class ErrorHandler {
         log.info(e.getMessage());
         return new ErrorResponse("E002", e.getMessage());
     }
+
     @ExceptionHandler({UnavailibleException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleUnavailableError(final RuntimeException e) {
@@ -51,7 +52,7 @@ public class ErrorHandler {
     @AllArgsConstructor
     @Getter
     public static class ErrorResponse {
-        String errorСode;
+        String errorCode;
         String error;
     }
 }
