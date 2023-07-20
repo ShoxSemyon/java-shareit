@@ -5,11 +5,10 @@ import lombok.experimental.FieldDefaults;
 
 import javax.persistence.*;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Data
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "users", schema = "public")

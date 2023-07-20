@@ -15,11 +15,11 @@ import java.time.LocalDateTime;
 /**
  * TODO Sprint add-bookings.
  */
-@Getter
-@Setter
+
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Data
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @ValidateDateStartAndEnd
 public class BookingDto {

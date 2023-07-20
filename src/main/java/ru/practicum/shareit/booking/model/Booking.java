@@ -12,12 +12,12 @@ import java.time.LocalDateTime;
 /**
  * TODO Sprint add-bookings.
  */
-@Getter
-@Setter
+
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 @Entity
 @Table(schema = "public", name = "bookings")
 public class Booking {
@@ -26,8 +26,10 @@ public class Booking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;
 
-
+    @Column(name = "start_date")
     LocalDateTime startDate;
+
+    @Column(name = "end_date")
     LocalDateTime endDate;
 
     @ManyToOne(fetch = FetchType.LAZY)

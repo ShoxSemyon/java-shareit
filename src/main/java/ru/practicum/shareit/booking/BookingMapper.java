@@ -1,35 +1,43 @@
 package ru.practicum.shareit.booking;
 
+import lombok.experimental.UtilityClass;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.dto.BookingShortDto;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.ItemMapper;
 import ru.practicum.shareit.user.UserMapper;
 
+@UtilityClass
 public class BookingMapper {
-    public static Booking convertToBooking(BookingDto bookingDto) {
-        return new Booking(bookingDto.getId(),
-                bookingDto.getStart(),
-                bookingDto.getEnd(),
-                null,
-                null,
-                null);
+    public Booking convertToBooking(BookingDto bookingDto) {
+
+        return Booking.builder()
+                .id(bookingDto.getId())
+                .startDate(bookingDto.getStart())
+                .endDate(bookingDto.getEnd())
+                .build();
     }
 
-    public static BookingDto convertToBookingDto(Booking booking) {
-        return new BookingDto(booking.getId(),
-                booking.getItem().getId(),
-                booking.getStartDate(),
-                booking.getEndDate(),
-                ItemMapper.convertToItem(booking.getItem()),
-                UserMapper.converFromDto(booking.getBooker()),
-                booking.getBookingStatus());
+    public BookingDto convertToBookingDto(Booking booking) {
+
+        return BookingDto.builder()
+                .id(booking.getId())
+                .item(ItemMapper.convertToItem(booking.getItem()))
+                .booker(UserMapper.converFromDto(booking.getBooker()))
+                .start(booking.getStartDate())
+                .end(booking.getEndDate())
+                .status(booking.getBookingStatus())
+                .build();
     }
 
-    public static BookingShortDto convertToBookingShortDto(Booking booking) {
-        return new BookingShortDto(booking.getId(),
-                booking.getBooker().getId()
-        );
+    public BookingShortDto convertToBookingShortDto(Booking booking) {
+
+        return BookingShortDto.builder()
+                .id(booking.getId())
+                .bookerId(booking.getBooker().getId())
+                .start(booking.getStartDate())
+                .end(booking.getEndDate())
+                .build();
 
     }
 }

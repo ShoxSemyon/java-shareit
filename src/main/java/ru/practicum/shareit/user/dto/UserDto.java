@@ -12,10 +12,10 @@ import javax.validation.constraints.NotNull;
 /**
  * TODO Sprint add-controllers.
  */
-@Getter
-@Setter
 @AllArgsConstructor
-@ToString
+@NoArgsConstructor
+@Builder
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDto {
     @NotNull(groups = UpdateGroupMarker.UpdateMarker.class)

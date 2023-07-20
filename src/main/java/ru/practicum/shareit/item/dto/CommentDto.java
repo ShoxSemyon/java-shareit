@@ -8,11 +8,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Builder
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CommentDto {
     long id;

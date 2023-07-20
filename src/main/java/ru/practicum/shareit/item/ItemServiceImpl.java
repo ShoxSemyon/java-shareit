@@ -3,6 +3,7 @@ package ru.practicum.shareit.item;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.BookingMapper;
 import ru.practicum.shareit.booking.BookingRepository;
 import ru.practicum.shareit.booking.dto.BookingStatus;
@@ -16,7 +17,6 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.UserServiceImpl;
 
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +25,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class ItemServiceImpl implements ItemService {
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
@@ -88,7 +89,6 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    @Transactional
     public List<ItemDto> search(String value) {
         if (value == null || value.isBlank()) return new ArrayList<>();
 
@@ -108,12 +108,12 @@ public class ItemServiceImpl implements ItemService {
         Item item = ItemMapper.convertToItemDto(itemDto);
         item.setId(itemId);
 
-        if (itemRepository.update(item.getId(),
+        if (itemRepository.update(
+                item.getId(),
                 id,
                 item.getName(),
                 item.getDescription(),
-                item.getAvailable(),
-                item.getRequest()) < 1) throw exceptionFormat(itemId);
+                item.getAvailable()) < 1) throw exceptionFormat(itemId);
 
         log.info("Вещь c id {} обновлена",
                 item.getId());
@@ -122,6 +122,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional
     public void delete(Long id, Long itemId) {
 
         if (itemRepository.deleteByIdAndOwner_Id(id, itemId) == null) {

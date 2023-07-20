@@ -1,7 +1,9 @@
 package ru.practicum.shareit.item.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.shareit.user.User;
@@ -9,10 +11,9 @@ import ru.practicum.shareit.user.User;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-@Getter
-@Setter
+
 @NoArgsConstructor
-@ToString
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
 @Table(name = "comments", schema = "public")

@@ -13,11 +13,10 @@ import java.util.List;
 /**
  * TODO Sprint add-controllers.
  */
-@Getter
-@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@Builder
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ItemDto {
     @NotNull(groups = ItemUpdateMarker.class)

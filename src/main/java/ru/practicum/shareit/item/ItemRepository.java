@@ -17,15 +17,14 @@ public interface ItemRepository extends JpaRepository<Item, Long> {
     @Modifying
     @Query(value = "UPDATE ITEMS it SET NAME = coalesce(:name, NAME),\n" +
             "    DESCRIPTION = coalesce(:description, DESCRIPTION),\n" +
-            "    IS_AVAILABLE = coalesce(:available, IS_AVAILABLE),\n" +
-            "    REQUEST_ID = coalesce(:request, REQUEST_ID)\n" +
+            "    IS_AVAILABLE = coalesce(:available, IS_AVAILABLE)\n" +
             "    WHERE ID =:id AND OWNER_ID = :ownerId", nativeQuery = true)
     Integer update(@Param("id") Long id,
-                @Param("ownerId") Long ownerId,
-                @Param("name") String name,
-                @Param("description") String description,
-                @Param("available") Boolean available,
-                @Param("request") Long request);
+                   @Param("ownerId") Long ownerId,
+                   @Param("name") String name,
+                   @Param("description") String description,
+                   @Param("available") Boolean available
+    );
 
     @Query("SELECT i FROM Item i WHERE" +
             "(lower(i.name) like concat('%',lower(:value),'%')" +

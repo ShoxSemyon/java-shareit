@@ -46,9 +46,6 @@ public class ItemRepositoryOldImpl implements ItemRepositoryOld {
             item.setDescription(oldItem.getDescription());
         if (item.getAvailable() == null)
             item.setAvailable(oldItem.getAvailable());
-        if (item.getRequest() == 0)
-            item.setRequest(oldItem.getRequest());
-
 
         itemDtoList.put(item.getId(), item);
         return item;

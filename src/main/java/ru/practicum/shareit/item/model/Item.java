@@ -9,12 +9,11 @@ import javax.persistence.*;
 /**
  * TODO Sprint add-controllers.
  */
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Builder
 @Entity
 @Table(name = "items", schema = "public")
 public class Item {
@@ -30,8 +29,4 @@ public class Item {
 
     @ManyToOne(fetch = FetchType.LAZY)
     User owner;// — владелец вещи;
-
-    @Column(name = "request_id")
-    Long request;//
-
 }
