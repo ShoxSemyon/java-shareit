@@ -7,7 +7,9 @@ import javax.persistence.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
 @Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity

@@ -15,7 +15,9 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter
+@Setter
+@ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Builder
 @Entity
