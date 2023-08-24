@@ -1,7 +1,9 @@
-package ru.practicum.shareit.user;
+package ru.practicum.shareit.user.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import ru.practicum.shareit.user.UpdateGroupMarker;
+import ru.practicum.shareit.user.UserCreateGroupMarker;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -10,10 +12,10 @@ import javax.validation.constraints.NotNull;
 /**
  * TODO Sprint add-controllers.
  */
-@Getter
-@Setter
 @AllArgsConstructor
-@ToString
+@NoArgsConstructor
+@Builder
+@Data
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UserDto {
     @NotNull(groups = UpdateGroupMarker.UpdateMarker.class)

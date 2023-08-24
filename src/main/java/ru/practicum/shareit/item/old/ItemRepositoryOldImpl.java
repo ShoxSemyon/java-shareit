@@ -1,6 +1,5 @@
-package ru.practicum.shareit.item;
+package ru.practicum.shareit.item.old;
 
-import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.exception.NotFoundException;
 import ru.practicum.shareit.item.model.Item;
 
@@ -10,8 +9,8 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-@Repository
-public class ItemRepositoryImpl implements ItemRepository {
+
+public class ItemRepositoryOldImpl implements ItemRepositoryOld {
     private final Map<Long, Item> itemDtoList = new HashMap<>();
     private Long idCounter = 0L;
 
@@ -26,7 +25,6 @@ public class ItemRepositoryImpl implements ItemRepository {
     public List<Item> loadAll(long id) {
         return itemDtoList.values()
                 .stream()
-                .filter(item -> item.getOwner() == id)
                 .collect(Collectors.toList());
     }
 
@@ -41,8 +39,6 @@ public class ItemRepositoryImpl implements ItemRepository {
         idExisting(item.getId());
         Item oldItem = itemDtoList.get(item.getId());
 
-        if (oldItem.getOwner() != userId) throw new NotFoundException();
-        item.setOwner(oldItem.getOwner());
 
         if (item.getName() == null || item.getName().isBlank())
             item.setName(oldItem.getName());
@@ -50,9 +46,6 @@ public class ItemRepositoryImpl implements ItemRepository {
             item.setDescription(oldItem.getDescription());
         if (item.getAvailable() == null)
             item.setAvailable(oldItem.getAvailable());
-        if (item.getRequest() == 0)
-            item.setRequest(oldItem.getRequest());
-
 
         itemDtoList.put(item.getId(), item);
         return item;

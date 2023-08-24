@@ -1,14 +1,23 @@
-package ru.practicum.shareit.user.dto;
+package ru.practicum.shareit.user;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import javax.persistence.*;
+
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@AllArgsConstructor
 @ToString
+@Builder
 @FieldDefaults(level = AccessLevel.PRIVATE)
+@Entity
+@Table(name = "users", schema = "public")
 public class User {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     long id;//— уникальный идентификатор пользователя;
 
     String name; //— имя или логин пользователя;
