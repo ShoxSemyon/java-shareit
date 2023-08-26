@@ -13,9 +13,12 @@ import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.RequestRepository;
+import ru.practicum.shareit.request.RequestServiceImpl;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 import ru.practicum.shareit.user.UserServiceImpl;
+import ru.practicum.shareit.util.OffsetBasedPageRequest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,6 +35,8 @@ public class ItemServiceImpl implements ItemService {
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
 
+    private final RequestRepository requestRepository;
+
 
     @Override
     @Transactional
@@ -41,6 +46,11 @@ public class ItemServiceImpl implements ItemService {
 
         Item item = ItemMapper.convertToItemDto(itemDto);
         item.setOwner(user);
+
+        item.setRequest(itemDto.getRequestId() == null ? null :
+                requestRepository.findById(itemDto.getRequestId())
+                        .orElseThrow(() -> RequestServiceImpl.exceptionFormat(itemDto.getRequestId())));
+
         itemRepository.save(item);
 
         log.info("Вещь {} пользователя id={} сохранена",
@@ -51,11 +61,11 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> getAll(Long id) {
+    public List<ItemDto> getAll(Long id, Integer from, Integer size) {
         log.info("Вещи для пользователя id={} сохранена",
                 id);
 
-        return itemRepository.findAllByOwnerId(id)
+        return itemRepository.findAllByOwnerId(id,new OffsetBasedPageRequest(from,size))
                 .stream()
                 .map(item -> {
                     ItemDto itemDto = ItemMapper.convertToItem(item);
@@ -89,13 +99,13 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> search(String value) {
+    public List<ItemDto> search(String value, Integer from, Integer size) {
         if (value == null || value.isBlank()) return new ArrayList<>();
 
         log.info("Вещи c описанием или названием = {}",
                 value);
 
-        return itemRepository.searchByValue(value)
+        return itemRepository.searchByValue(value,new OffsetBasedPageRequest(from,size))
                 .stream()
                 .map(ItemMapper::convertToItem)
                 .collect(Collectors.toList());
@@ -113,7 +123,8 @@ public class ItemServiceImpl implements ItemService {
                 id,
                 item.getName(),
                 item.getDescription(),
-                item.getAvailable()) < 1) throw exceptionFormat(itemId);
+                item.getAvailable(),
+                itemDto.getRequestId()) < 1) throw exceptionFormat(itemId);
 
         log.info("Вещь c id {} обновлена",
                 item.getId());
