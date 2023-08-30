@@ -21,7 +21,9 @@ import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
 
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
@@ -159,7 +161,7 @@ class BookingServiceImplTest {
 
         BookingDto updateBooking = bookingService.update(1L,
                 true,
-                1l);
+                1L);
 
         assertThat(updateBooking.getId(), equalTo(1L));
         assertThat(updateBooking.getItem().getId(), equalTo(1L));
@@ -233,6 +235,7 @@ class BookingServiceImplTest {
         assertThat(bookingDtoList.size(), equalTo(1));
 
     }
+
     @Test
     void test13_getAllEmptyBookingDtoUser() {
 

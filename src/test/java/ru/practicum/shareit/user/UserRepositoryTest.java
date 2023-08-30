@@ -1,7 +1,5 @@
 package ru.practicum.shareit.user;
 
-import org.h2.mvstore.tx.Transaction;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +13,7 @@ import java.util.List;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.equalTo;
 
-@DataJpaTest( )
+@DataJpaTest
 @Transactional(propagation = Propagation.REQUIRES_NEW)
 public class UserRepositoryTest {
 

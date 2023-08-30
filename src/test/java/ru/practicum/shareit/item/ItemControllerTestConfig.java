@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import ru.practicum.shareit.booking.BookingService;
 
 import static org.mockito.Mockito.mock;
 
@@ -14,6 +13,7 @@ public class ItemControllerTestConfig {
     public ItemService requestService() {
         return mock(ItemService.class);
     }
+
     @Bean
     public ObjectMapper mapper() {
         ObjectMapper mapper = new ObjectMapper();

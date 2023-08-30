@@ -101,7 +101,7 @@ class RequestServiceImplTest {
 
         Mockito.when(userRepository.findById(1L))
                 .thenReturn(Optional.of(user));
-        Mockito.when(requestRepository.searchAllByRequestor_IdOrderByCreatedDesc(1l))
+        Mockito.when(requestRepository.searchAllByRequestor_IdOrderByCreatedDesc(1L))
                 .thenReturn(Collections.singletonList(request));
 
         List<RequestDto> listsReq = requestService.getAllUserRequest(1L);
@@ -126,7 +126,7 @@ class RequestServiceImplTest {
         Mockito.when(userRepository.findById(1L))
                 .thenReturn(Optional.of(user));
 
-        Mockito.when(requestRepository.findById(1l))
+        Mockito.when(requestRepository.findById(1L))
                 .thenReturn(Optional.of(request));
         RequestDto newRequest = requestService.get(1L, 1L);
 
