@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.booking.dto.BookingStatus;
@@ -159,7 +160,9 @@ class BookingRepositoryTest {
                 .findAllByItem_Owner_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(owner.getId(),
                         LocalDateTime.now().plusDays(1),
                         LocalDateTime.now().plusDays(1),
-                        new OffsetBasedPageRequest(0, 10));
+                        new OffsetBasedPageRequest(0,
+                                10,
+                                Sort.by("id").descending()));
 
         assertThat(lists.size(), equalTo(1));
     }
