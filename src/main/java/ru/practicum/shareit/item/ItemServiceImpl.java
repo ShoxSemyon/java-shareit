@@ -51,7 +51,7 @@ public class ItemServiceImpl implements ItemService {
                 requestRepository.findById(itemDto.getRequestId())
                         .orElseThrow(() -> RequestServiceImpl.exceptionFormat(itemDto.getRequestId())));
 
-        itemRepository.save(item);
+        item = itemRepository.save(item);
 
         log.info("Вещь {} пользователя id={} сохранена",
                 itemDto,
@@ -65,7 +65,7 @@ public class ItemServiceImpl implements ItemService {
         log.info("Вещи для пользователя id={} сохранена",
                 id);
 
-        return itemRepository.findAllByOwnerId(id,new OffsetBasedPageRequest(from,size))
+        return itemRepository.findAllByOwnerId(id, new OffsetBasedPageRequest(from, size))
                 .stream()
                 .map(item -> {
                     ItemDto itemDto = ItemMapper.convertToItem(item);
@@ -105,7 +105,7 @@ public class ItemServiceImpl implements ItemService {
         log.info("Вещи c описанием или названием = {}",
                 value);
 
-        return itemRepository.searchByValue(value,new OffsetBasedPageRequest(from,size))
+        return itemRepository.searchByValue(value, new OffsetBasedPageRequest(from, size))
                 .stream()
                 .map(ItemMapper::convertToItem)
                 .collect(Collectors.toList());

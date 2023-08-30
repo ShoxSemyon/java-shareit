@@ -41,15 +41,15 @@ public class RequestController {
 
     @GetMapping("/all")
     public List<RequestDto> getAllNoUserRequest(@RequestHeader("X-Sharer-User-Id") @NotNull Long userId,
-                                                @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
-                                                @RequestParam(defaultValue = "10") @Positive Integer size) {
+                                              @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                              @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Начало поиска запросов других пользователей");
         return requestService.getAllNoUserRequest(userId, from, size);
     }
 
     @GetMapping("/{requestId}")
-    public RequestDto getAllNoUserRequest(@RequestHeader("X-Sharer-User-Id") @NotNull Long userId,
-                                          @PathVariable @NotNull Long requestId) {
+    public RequestDto getUserRequest(@RequestHeader("X-Sharer-User-Id") @NotNull Long userId,
+                                        @PathVariable @NotNull Long requestId) {
         log.info("Начало поиска запроса {}", requestId);
         return requestService.get(requestId, userId);
     }

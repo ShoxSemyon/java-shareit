@@ -36,7 +36,7 @@ public class RequestServiceImpl implements RequestService {
         request.setRequestor(user);
         request.setCreated(LocalDateTime.now());
 
-        requestRepository.save(request);
+        request = requestRepository.save(request);
 
         log.info("Запрос  {}  пользователя id={} сохранён",
                 request,

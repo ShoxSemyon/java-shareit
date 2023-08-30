@@ -2,6 +2,7 @@ package ru.practicum.shareit.booking;
 
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.booking.dto.BookingStatus;
 import ru.practicum.shareit.booking.model.Booking;
 
@@ -9,6 +10,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findAllByBooker_IdOrderByStartDateDesc(
@@ -72,7 +74,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             BookingStatus status);
 
     Integer countAllByBooker_IdAndItem_IdAndBookingStatusAndStartDateIsBefore(
-            long ownerId,
+            long bookerId,
             long itemId,
             BookingStatus status,
             LocalDateTime localDateTime);
