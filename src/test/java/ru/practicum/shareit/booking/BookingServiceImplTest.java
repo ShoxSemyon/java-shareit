@@ -287,6 +287,7 @@ class BookingServiceImplTest {
         assertThat(bookingDtoList.size(), equalTo(1));
 
     }
+
     @Test
     void test17_getAllNormalBookingDtoUser() {
 
@@ -303,6 +304,7 @@ class BookingServiceImplTest {
         assertThat(bookingDtoList.size(), equalTo(1));
 
     }
+
     @Test
     void test18_getAllNormalBookingDtoUser() {
 
@@ -319,6 +321,7 @@ class BookingServiceImplTest {
         assertThat(bookingDtoList.size(), equalTo(1));
 
     }
+
     @Test
     void test19_getAllNormalBookingDtoUser() {
 
@@ -353,6 +356,7 @@ class BookingServiceImplTest {
         assertThat(bookingDtoList.size(), equalTo(1));
 
     }
+
     @Test
     void test21_getAllNormalBookingDtoOwner() {
 
@@ -369,6 +373,7 @@ class BookingServiceImplTest {
         assertThat(bookingDtoList.size(), equalTo(1));
 
     }
+
     @Test
     void test22_getAllNormalBookingDtoOwner() {
 
