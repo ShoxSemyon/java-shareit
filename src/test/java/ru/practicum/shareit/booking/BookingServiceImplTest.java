@@ -271,4 +271,121 @@ class BookingServiceImplTest {
                         10));
     }
 
+    @Test
+    void test16_getAllNormalBookingDtoUser() {
+
+        when(bookingRepository.findAllByBooker_IdAndAndEndDateBeforeOrderByStartDateDesc(anyLong(),
+                any(),
+                any()))
+                .thenReturn(Collections.singletonList(booking));
+
+        List<BookingDto> bookingDtoList = bookingService.getAllForUser(1L,
+                BookingState.PAST,
+                0,
+                10);
+
+        assertThat(bookingDtoList.size(), equalTo(1));
+
+    }
+    @Test
+    void test17_getAllNormalBookingDtoUser() {
+
+        when(bookingRepository.findAllByBooker_IdAndAndStartDateAfterOrderByStartDateDesc(anyLong(),
+                any(),
+                any()))
+                .thenReturn(Collections.singletonList(booking));
+
+        List<BookingDto> bookingDtoList = bookingService.getAllForUser(1L,
+                BookingState.FUTURE,
+                0,
+                10);
+
+        assertThat(bookingDtoList.size(), equalTo(1));
+
+    }
+    @Test
+    void test18_getAllNormalBookingDtoUser() {
+
+        when(bookingRepository.findAllByBooker_IdAndBookingStatusOrderByStartDateDesc(anyLong(),
+                any(),
+                any()))
+                .thenReturn(Collections.singletonList(booking));
+
+        List<BookingDto> bookingDtoList = bookingService.getAllForUser(1L,
+                BookingState.WAITING,
+                0,
+                10);
+
+        assertThat(bookingDtoList.size(), equalTo(1));
+
+    }
+    @Test
+    void test19_getAllNormalBookingDtoUser() {
+
+        when(bookingRepository.findAllByBooker_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(anyLong(),
+                any(),
+                any(),
+                any()))
+                .thenReturn(Collections.singletonList(booking));
+
+        List<BookingDto> bookingDtoList = bookingService.getAllForUser(1L,
+                BookingState.CURRENT,
+                0,
+                10);
+
+        assertThat(bookingDtoList.size(), equalTo(1));
+
+    }
+
+    @Test
+    void test20_getAllNormalBookingDtoOwner() {
+
+        when(bookingRepository.findAllByItem_Owner_IdAndAndEndDateBeforeOrderByStartDateDesc(anyLong(),
+                any(),
+                any()))
+                .thenReturn(Collections.singletonList(booking));
+
+        List<BookingDto> bookingDtoList = bookingService.getAllForOwner(1L,
+                BookingState.PAST,
+                0,
+                10);
+
+        assertThat(bookingDtoList.size(), equalTo(1));
+
+    }
+    @Test
+    void test21_getAllNormalBookingDtoOwner() {
+
+        when(bookingRepository.findAllByItem_Owner_IdAndBookingStatusOrderByStartDateDesc(anyLong(),
+                any(),
+                any()))
+                .thenReturn(Collections.singletonList(booking));
+
+        List<BookingDto> bookingDtoList = bookingService.getAllForOwner(1L,
+                BookingState.WAITING,
+                0,
+                10);
+
+        assertThat(bookingDtoList.size(), equalTo(1));
+
+    }
+    @Test
+    void test22_getAllNormalBookingDtoOwner() {
+
+        when(bookingRepository.findAllByItem_Owner_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(anyLong(),
+                any(),
+                any(),
+                any()))
+                .thenReturn(Collections.singletonList(booking));
+
+        List<BookingDto> bookingDtoList = bookingService.getAllForOwner(1L,
+                BookingState.CURRENT,
+                0,
+                10);
+
+        assertThat(bookingDtoList.size(), equalTo(1));
+
+    }
+
+
 }

@@ -12,6 +12,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.practicum.shareit.exception.NotFoundException;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.request.dto.RequestDto;
 import ru.practicum.shareit.user.User;
 import ru.practicum.shareit.user.UserRepository;
@@ -47,6 +48,8 @@ class RequestServiceImplTest {
 
     Request request;
 
+    Item item;
+
     @BeforeEach
     void setUp() {
         userDto = UserDto.builder()
@@ -60,8 +63,22 @@ class RequestServiceImplTest {
                 .name("Ivan")
                 .build();
 
+        User requestor = User.builder()
+                .id(2)
+                .email("2@ya.ru")
+                .name("2van")
+                .build();
+
         requestDto = RequestDto.builder()
                 .description("Какая - то вещь")
+                .build();
+
+        item = Item.builder()
+                .id(1L)
+                .description("X")
+                .name("XX")
+                .owner(requestor)
+                .available(true)
                 .build();
 
         request = Request.builder()
@@ -69,7 +86,10 @@ class RequestServiceImplTest {
                 .description("Какая - то вещь")
                 .created(LocalDateTime.now())
                 .requestor(user)
+                .items(Collections.singletonList(item))
                 .build();
+
+        item.setRequest(request);
     }
 
     @Test
@@ -104,6 +124,7 @@ class RequestServiceImplTest {
         Mockito.when(requestRepository.searchAllByRequestor_IdOrderByCreatedDesc(1L))
                 .thenReturn(Collections.singletonList(request));
 
+
         List<RequestDto> listsReq = requestService.getAllUserRequest(1L);
 
         assertThat(listsReq.size(), equalTo(1));
@@ -128,6 +149,8 @@ class RequestServiceImplTest {
 
         Mockito.when(requestRepository.findById(1L))
                 .thenReturn(Optional.of(request));
+
+
         RequestDto newRequest = requestService.get(1L, 1L);
 
         assertThat(newRequest.getId(), equalTo(1L));
