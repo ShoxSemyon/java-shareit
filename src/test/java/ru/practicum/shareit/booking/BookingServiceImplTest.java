@@ -392,5 +392,4 @@ class BookingServiceImplTest {
 
     }
 
-
 }
