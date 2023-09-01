@@ -14,7 +14,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 @Slf4j
 public class ErrorHandler {
 
-    @ExceptionHandler({AllreadyExcetprion.class, ConstraintViolationException.class})
+    @ExceptionHandler({ConstraintViolationException.class})
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleAlreadyError(final RuntimeException e) {
         log.info(e.getMessage());

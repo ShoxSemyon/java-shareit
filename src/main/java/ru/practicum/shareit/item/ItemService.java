@@ -10,11 +10,11 @@ public interface ItemService {
 
      ItemDto create(ItemDto itemDto, Long id);
 
-     List<ItemDto> getAll(Long id);
+     List<ItemDto> getAll(Long id, Integer from, Integer size);
 
      ItemDto get(Long id, Long userId);
 
-     List<ItemDto> search(String value);
+     List<ItemDto> search(String value, Integer from, Integer size);
 
      ItemDto update(ItemDto itemDto, Long id, Long itemId);
 

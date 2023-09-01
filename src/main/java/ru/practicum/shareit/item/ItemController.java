@@ -9,6 +9,8 @@ import ru.practicum.shareit.item.dto.ItemDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 /**
@@ -30,9 +32,11 @@ public class ItemController {
     }
 
     @GetMapping
-    public List<ItemDto> getAll(@RequestHeader("X-Sharer-User-Id") @NotNull Long id) {
+    public List<ItemDto> getAll(@RequestHeader("X-Sharer-User-Id") @NotNull Long id,
+                                @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Получения всех вещей пользователя с id= {}", id);
-        return itemService.getAll(id);
+        return itemService.getAll(id, from, size);
     }
 
     @GetMapping("/{id}")
@@ -43,9 +47,11 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public List<ItemDto> search(@RequestParam("text") String value) {
+    public List<ItemDto> search(@RequestParam("text") String value,
+                                @RequestParam(defaultValue = "0") @PositiveOrZero Integer from,
+                                @RequestParam(defaultValue = "10") @Positive Integer size) {
         log.info("Поиск вещей по значению= {}", value);
-        return itemService.search(value);
+        return itemService.search(value, from, size);
     }
 
     @PatchMapping("/{itemId}")
