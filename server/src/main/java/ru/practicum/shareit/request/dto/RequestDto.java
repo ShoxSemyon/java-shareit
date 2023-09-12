@@ -8,7 +8,6 @@ import org.springframework.data.annotation.ReadOnlyProperty;
 import org.springframework.format.annotation.DateTimeFormat;
 import ru.practicum.shareit.item.dto.ItemShortDto;
 
-import javax.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import java.util.List;
 

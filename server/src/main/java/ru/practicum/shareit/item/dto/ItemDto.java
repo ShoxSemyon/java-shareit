@@ -2,12 +2,8 @@ package ru.practicum.shareit.item.dto;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.annotation.ReadOnlyProperty;
 import ru.practicum.shareit.booking.dto.BookingShortDto;
-import ru.practicum.shareit.item.ItemUpdateMarker;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
