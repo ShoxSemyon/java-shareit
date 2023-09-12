@@ -28,6 +28,7 @@ public class RequestServiceImpl implements RequestService {
     final RequestRepository requestRepository;
 
     @Override
+    @Transactional
     public RequestDto create(RequestDto requestDto, Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> UserServiceImpl.exceptionFormat(userId));
