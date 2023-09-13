@@ -132,7 +132,7 @@ public class BookingServiceImpl implements BookingService {
                 break;
             case CURRENT:
                 bookings = bookingRepository
-                        .findAllByBooker_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDescIdAsc(
+                        .findAllByBooker_IdAndStartDateBeforeAndEndDateAfterOrderByIdDesc(
                                 userId,
                                 LocalDateTime.now(),
                                 LocalDateTime.now(),
