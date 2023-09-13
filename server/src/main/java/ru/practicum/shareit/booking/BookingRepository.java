@@ -32,7 +32,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             BookingStatus status,
             Pageable pageable);
 
-    List<Booking> findAllByBooker_IdAndStartDateBeforeAndEndDateAfterOrderByIdDesc(
+    List<Booking> findAllByBooker_IdAndStartDateBeforeAndEndDateAfterOrderByIdAsc(
             long userId,
             LocalDateTime localDateTime1,
             LocalDateTime localDateTime2,
