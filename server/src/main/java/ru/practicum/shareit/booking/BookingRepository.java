@@ -32,7 +32,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             BookingStatus status,
             Pageable pageable);
 
-    List<Booking> findAllByBooker_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(
+    List<Booking> findAllByBooker_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDescIdAsc(
             long userId,
             LocalDateTime localDateTime1,
             LocalDateTime localDateTime2,
@@ -42,7 +42,7 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
             long ownerId,
             Pageable pageable);
 
-    List<Booking> findAllByItem_Owner_IdAndAndEndDateBeforeOrderByStartDateDesc(
+    List<Booking> findAllByItem_Owner_IdAndAndEndDateBeforeOrderByEndDateDesc(
             long ownerId,
             LocalDateTime localDateTime,
             Pageable pageable);

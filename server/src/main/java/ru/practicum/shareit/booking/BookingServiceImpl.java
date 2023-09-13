@@ -132,7 +132,7 @@ public class BookingServiceImpl implements BookingService {
                 break;
             case CURRENT:
                 bookings = bookingRepository
-                        .findAllByBooker_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDesc(
+                        .findAllByBooker_IdAndStartDateBeforeAndEndDateAfterOrderByStartDateDescIdAsc(
                                 userId,
                                 LocalDateTime.now(),
                                 LocalDateTime.now(),
@@ -166,7 +166,7 @@ public class BookingServiceImpl implements BookingService {
                 break;
             case PAST:
                 bookings = bookingRepository
-                        .findAllByItem_Owner_IdAndAndEndDateBeforeOrderByStartDateDesc(
+                        .findAllByItem_Owner_IdAndAndEndDateBeforeOrderByEndDateDesc(
                                 ownerId,
                                 LocalDateTime.now(),
                                 pageable);
